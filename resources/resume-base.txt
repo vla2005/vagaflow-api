@@ -1,0 +1,44 @@
+Viktor Lacerda | Engenheiro de Software | Brasilia - DF
+Contato: (61) 92000-1340 | viktorlacerda@gmail.com
+LinkedIn: https://linkedin.com/in/viktor-lacerda-148310127
+Portfolio: https://viktorware.com
+
+Resumo: Engenheiro de Software full stack com 2 anos de experiencia, foco em Java, PHP, JavaScript, APIs REST, Clean Architecture, Clean Code, otimizacoes e SOLID.
+
+Competencias comprovadas:
+- Linguagens e frameworks: PHP, Laravel, Java, Spring Boot, JavaScript, TypeScript, Node.js, Vue.js, React, HTML, CSS, Tailwind CSS.
+- Front-end: componentes, interfaces responsivas, acessibilidade e manutencao de telas.
+- Bancos: MySQL, PostgreSQL, SQL Server, consultas SQL, relatorios, listagens e otimizacao de dados.
+- APIs e integracoes: REST, OpenAPI/Swagger, Postman, JWT, OAuth, Keycloak, Laravel Sanctum, Queues, RabbitMQ, Jobs, WebSocket e WebRTC.
+- Arquitetura: Clean Architecture, Clean Code, SOLID, arquitetura em camadas.
+- Cloud e DevOps: AWS (EC2, S3, Systems Manager), Oracle Cloud (OCI), Docker, Nginx, PM2, CI/CD, OIDC, Git, GitHub e GitHub Actions.
+- Testes: PHPUnit e JUnit. Metodologias: Scrum e Kanban.
+- Idiomas: Portugues nativo, Ingles C1, Espanhol C2.
+
+Experiencia profissional:
+1. SERPRO - Servico Federal de Processamento de Dados | Engenheiro de Software | Brasilia - DF | abril/2024 a abril/2026
+- Migracao de sistema legado para arquitetura mais moderna, preservando funcionalidades e estabilizando bugs e releases.
+- Otimizacao de queries e cache em APIs REST: tempo de resposta de 5 segundos para menos de 1 segundo, eliminando quedas em picos de trafego.
+- Melhorias de acessibilidade no front-end.
+- APIs REST com PHP/Laravel e Java/Spring Boot; interfaces Vue.js e React.
+- Bancos relacionais, SQL, listagens, relatorios, testes JUnit/PHPUnit e entregas com Git, GitHub, Docker e CI/CD.
+2. Freelance Full Stack - Sistema de Gestao de Oficina Mecanica | Brasilia - DF | novembro/2025
+- Substituiu controles manuais em planilhas e calculadora por sistema de gestao com ordens de servico e calculos financeiros automatizados.
+- Laravel, Vue.js, MySQL e Tailwind CSS; dashboard de clientes, servicos e financeiro.
+- Laravel Sanctum, 2FA com Google Authenticator e Laravel Queues.
+3. Freelance - Landing Page Disk Baterias DF | Brasilia - DF | maio/2026
+- Landing page mobile-first com React e Tailwind CSS; layout, performance e responsividade.
+
+Projetos pessoais e academicos:
+1. NutriTreino - Sistema de Gestao Nutricional e Treinos | marco/2026 a maio/2026
+- Centralizou em um sistema dados antes dispersos entre PDFs, WhatsApp e chamadas de video.
+- Gemini para rascunhos personalizados de dietas e treinos.
+- Dashboards para profissional e paciente/aluno, com graficos de evolucao e check-ins.
+- Laravel, React.js, Vite, WebSocket, WebRTC e upload de fotos.
+2. Automacao Inteligente de Busca de Vagas | maio/2026
+- Busca, filtragem e analise de aderencia com Gemini; email com avaliacao, curriculo otimizado e link de candidatura.
+- AWS EC2, Nginx, cron, GitHub Actions, OIDC e AWS Systems Manager.
+3. Automacao de Ofertas com Shopee Afiliados e Telegram | junho/2026
+- Java, Spring Boot, Maven, Docker, API GraphQL da Shopee e envio automatico ao Telegram.
+
+Educacao: Bacharelado em Engenharia de Software | Universidade Catolica de Brasilia - UCB | marco/2023 a dezembro/2026 (previsao).
