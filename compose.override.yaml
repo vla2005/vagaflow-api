@@ -1,0 +1,8 @@
+services:
+  database:
+    ports:
+      - "127.0.0.1:${DB_FORWARD_PORT:-5433}:5432"
+
+  api:
+    ports:
+      - "127.0.0.1:${API_PORT:-8000}:8000"

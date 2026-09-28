@@ -24,8 +24,6 @@ x-laravel: &laravel
 services:
   database:
     image: postgres:17-alpine
-    ports:
-      - "127.0.0.1:${DB_FORWARD_PORT:-5433}:5432"
     environment:
       POSTGRES_DB: ${DOCKER_DB_DATABASE:-vagaflow}
       POSTGRES_USER: ${DOCKER_DB_USERNAME:-vagaflow}
@@ -49,8 +47,8 @@ services:
 
   api:
     <<: *laravel
-    ports:
-      - "${API_PORT:-8000}:8000"
+    expose:
+      - "8000"
     depends_on:
       migrate:
         condition: service_completed_successfully
