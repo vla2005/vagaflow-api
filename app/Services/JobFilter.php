@@ -50,19 +50,18 @@ class JobFilter
         $hasTechnologyFilters = $profile->technologies !== [];
         $titleMatch = $hasTitleFilters && $this->hasAny($title, $profile->job_titles);
         $technologyMatch = $hasTechnologyFilters && $this->hasAny($fullText, $profile->technologies);
+        $area = $this->normalize($job['cargo'] ?? $job['area'] ?? '');
+        $hasAreaFilters = ($profile->areas ?? []) !== [];
+        $areaMatch = $hasAreaFilters && in_array($area, $profile->areas, true);
 
-        if (($hasTitleFilters || $hasTechnologyFilters) && ! ($titleMatch || $technologyMatch)) {
+        if (($hasTitleFilters || $hasTechnologyFilters || $hasAreaFilters)
+            && ! ($titleMatch || $technologyMatch || $areaMatch)) {
             return false;
         }
 
         $mode = $this->normalize($job['forma_trabalho'] ?? $job['work_mode'] ?? '');
         if ($this->restricts($profile->work_modes, ['remoto', 'hibrido', 'presencial'])
             && ! $this->hasAny($mode, $profile->work_modes)) {
-            return false;
-        }
-
-        $area = $this->normalize($job['cargo'] ?? $job['area'] ?? '');
-        if (($profile->areas ?? []) !== [] && ! in_array($area, $profile->areas, true)) {
             return false;
         }
 

@@ -160,6 +160,46 @@ class StoredOpportunityDispatcherTest extends TestCase
         Queue::assertPushed(EvaluateOpportunityForUser::class, 1);
     }
 
+    public function test_job_can_match_by_area_when_title_and_technology_are_absent(): void
+    {
+        Queue::fake();
+        $user = User::factory()->create(['email' => 'area-match@example.com']);
+        AutomationProfile::query()->create([
+            'user_id' => $user->id,
+            'is_active' => true,
+            'job_titles' => ['Developer'],
+            'areas' => ['backend'],
+            'seniorities' => ['junior'],
+            'technologies' => ['Laravel'],
+            'excluded_keywords' => [],
+            'work_modes' => ['remoto'],
+            'locations' => [],
+            'resume_text' => str_repeat('Experiência com desenvolvimento de software. ', 20),
+            'resume_data' => ['identity' => ['name' => 'Candidato']],
+            'resume_parse_status' => 'ready',
+        ]);
+        SourceJob::query()->create([
+            'source' => 'meu_padrinho',
+            'source_key' => 'area-only-match',
+            'level' => 'junior',
+            'area' => 'BACKEND',
+            'title' => 'Analista de Aplicações',
+            'work_mode' => 'remoto',
+            'payload' => [
+                'nivel' => 'junior',
+                'cargo' => 'BACKEND',
+                'titulo_vaga' => 'Analista de Aplicações',
+                'forma_trabalho' => 'remoto',
+                'descricao_vaga' => 'Manutenção de aplicações corporativas.',
+            ],
+            'last_seen_at' => now(),
+        ]);
+
+        $this->artisan('vagaflow:reevaluate', ['email' => $user->email])->assertSuccessful();
+
+        Queue::assertPushed(EvaluateOpportunityForUser::class, 1);
+    }
+
     private function sourceJob(string $key, string $title): SourceJob
     {
         return SourceJob::query()->create([
