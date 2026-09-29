@@ -6,6 +6,7 @@ use App\Models\Job;
 use Illuminate\Support\Facades\Log;
 use Minishlink\WebPush\Subscription;
 use Minishlink\WebPush\WebPush;
+use RuntimeException;
 use Throwable;
 
 class WebPushService
@@ -18,8 +19,6 @@ class WebPushService
         $devices = $job->user->pushSubscriptions;
 
         if ($devices->isEmpty()) {
-            $job->update(['push_notified_at' => now()]);
-
             return;
         }
 
@@ -29,8 +28,7 @@ class WebPushService
 
         if ($publicKey === '' || $privateKey === '' || $subject === '') {
             Log::warning('Web Push não configurado; notificação não enviada.', ['job_id' => $job->id]);
-
-            return;
+            throw new RuntimeException('Web Push não configurado.');
         }
 
         $webPush = new WebPush(['VAPID' => [
@@ -45,6 +43,8 @@ class WebPushService
             'jobId' => $job->id,
             'unreadCount' => $this->subscriptions->unreadCount($job->user),
         ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        $delivered = false;
 
         foreach ($devices as $device) {
             try {
@@ -63,6 +63,7 @@ class WebPushService
                 if ($report->isSubscriptionExpired()) {
                     $device->delete();
                 } elseif ($report->isSuccess()) {
+                    $delivered = true;
                     $device->update(['last_used_at' => now()]);
                 } else {
                     Log::warning('Falha ao enviar Web Push.', [
@@ -74,6 +75,10 @@ class WebPushService
             } catch (Throwable $exception) {
                 report($exception);
             }
+        }
+
+        if (! $delivered) {
+            throw new RuntimeException('Nenhum dispositivo recebeu a notificação Web Push.');
         }
 
         $job->update(['push_notified_at' => now()]);

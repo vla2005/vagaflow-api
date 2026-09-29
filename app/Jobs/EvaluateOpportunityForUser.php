@@ -53,7 +53,7 @@ class EvaluateOpportunityForUser implements ShouldBeUnique, ShouldQueue
             ->first();
 
         if ($existing) {
-            if ($existing->analysis_state === 'accepted' && ! $existing->sent_at) {
+            if ($existing->analysis_state === 'accepted' && (! $existing->sent_at || ! $existing->push_notified_at)) {
                 $this->deliver($existing);
             }
 
@@ -101,7 +101,9 @@ class EvaluateOpportunityForUser implements ShouldBeUnique, ShouldQueue
             SendNewOpportunityPush::dispatch($job->id);
         }
 
-        Mail::to($job->user->email)->send(new OpportunityFound($job));
-        $job->update(['sent_at' => now()]);
+        if (! $job->sent_at) {
+            Mail::to($job->user->email)->send(new OpportunityFound($job));
+            $job->update(['sent_at' => now()]);
+        }
     }
 }
