@@ -66,10 +66,16 @@ class WebPushService
                     $delivered = true;
                     $device->update(['last_used_at' => now()]);
                 } else {
+                    $response = $report->getResponse();
+
                     Log::warning('Falha ao enviar Web Push.', [
                         'job_id' => $job->id,
                         'subscription_id' => $device->id,
                         'reason' => $report->getReason(),
+                        'status' => $response?->getStatusCode(),
+                        'response' => $report->getResponseContent(),
+                        'apns_id' => $response?->getHeaderLine('apns-id'),
+                        'endpoint_host' => parse_url($device->endpoint, PHP_URL_HOST),
                     ]);
                 }
             } catch (Throwable $exception) {
