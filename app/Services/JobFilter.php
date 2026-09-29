@@ -46,10 +46,12 @@ class JobFilter
             return false;
         }
 
-        $titleMatch = $profile->job_titles === [] || $this->hasAny($title, $profile->job_titles);
-        $technologyMatch = $profile->technologies === [] || $this->hasAny($fullText, $profile->technologies);
+        $hasTitleFilters = $profile->job_titles !== [];
+        $hasTechnologyFilters = $profile->technologies !== [];
+        $titleMatch = $hasTitleFilters && $this->hasAny($title, $profile->job_titles);
+        $technologyMatch = $hasTechnologyFilters && $this->hasAny($fullText, $profile->technologies);
 
-        if (! $titleMatch || ! $technologyMatch) {
+        if (($hasTitleFilters || $hasTechnologyFilters) && ! ($titleMatch || $technologyMatch)) {
             return false;
         }
 

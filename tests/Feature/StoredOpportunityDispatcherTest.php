@@ -99,6 +99,67 @@ class StoredOpportunityDispatcherTest extends TestCase
         Queue::assertPushed(EvaluateOpportunityForUser::class, 1);
     }
 
+    public function test_job_can_match_by_title_when_configured_technology_is_absent(): void
+    {
+        Queue::fake();
+        $user = User::factory()->create(['email' => 'title-match@example.com']);
+        AutomationProfile::query()->create([
+            'user_id' => $user->id,
+            'is_active' => true,
+            'job_titles' => ['Developer'],
+            'seniorities' => ['junior'],
+            'technologies' => ['Laravel'],
+            'excluded_keywords' => [],
+            'work_modes' => ['remoto'],
+            'locations' => [],
+            'resume_text' => str_repeat('Experiência com desenvolvimento de software. ', 20),
+            'resume_data' => ['identity' => ['name' => 'Candidato']],
+            'resume_parse_status' => 'ready',
+        ]);
+        $this->sourceJob('title-only-match', 'Backend Developer PHP');
+
+        $this->artisan('vagaflow:reevaluate', ['email' => $user->email])->assertSuccessful();
+
+        Queue::assertPushed(EvaluateOpportunityForUser::class, 1);
+    }
+
+    public function test_job_can_match_by_technology_when_configured_title_is_absent(): void
+    {
+        Queue::fake();
+        $user = User::factory()->create(['email' => 'technology-match@example.com']);
+        AutomationProfile::query()->create([
+            'user_id' => $user->id,
+            'is_active' => true,
+            'job_titles' => ['Developer'],
+            'seniorities' => ['junior'],
+            'technologies' => ['Laravel'],
+            'excluded_keywords' => [],
+            'work_modes' => ['remoto'],
+            'locations' => [],
+            'resume_text' => str_repeat('Experiência com desenvolvimento de software. ', 20),
+            'resume_data' => ['identity' => ['name' => 'Candidato']],
+            'resume_parse_status' => 'ready',
+        ]);
+        SourceJob::query()->create([
+            'source' => 'meu_padrinho',
+            'source_key' => 'technology-only-match',
+            'level' => 'junior',
+            'title' => 'Analista de Aplicações',
+            'work_mode' => 'remoto',
+            'payload' => [
+                'nivel' => 'junior',
+                'titulo_vaga' => 'Analista de Aplicações',
+                'forma_trabalho' => 'remoto',
+                'descricao_vaga' => 'Desenvolvimento de aplicações com Laravel.',
+            ],
+            'last_seen_at' => now(),
+        ]);
+
+        $this->artisan('vagaflow:reevaluate', ['email' => $user->email])->assertSuccessful();
+
+        Queue::assertPushed(EvaluateOpportunityForUser::class, 1);
+    }
+
     private function sourceJob(string $key, string $title): SourceJob
     {
         return SourceJob::query()->create([
