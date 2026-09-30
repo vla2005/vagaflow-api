@@ -34,7 +34,7 @@ Artisan::command('vagaflow:create-user', function () {
 })->purpose('Cria o usuário inicial do VagaFlow');
 
 Schedule::command('vagaflow:search')
-    ->everyThirtyMinutes()
+    ->everyFifteenMinutes()
     ->withoutOverlapping(25)
     ->onOneServer();
 
